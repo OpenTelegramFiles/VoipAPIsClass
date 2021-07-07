@@ -1083,7 +1083,7 @@ opt23
 	
 opt93
 	  Zoho	
-opt93"""
+opt93""".split("\n")
     def get_number(self, country, service):
         temp = json.loads(requests.get(
             "http://smspva.com/priemnik.php?metod=get_number&country=" + country + "&service=" + service + "&apikey=" + self.api_key).text)
