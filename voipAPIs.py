@@ -3,6 +3,36 @@ import requests
 class five_sim:
     def __init__(self, api_key):
         self.api_key = api_key
+    def ban_number(self,id):
+        if requests.get('https://5sim.net/v1/user/ban/'+ str(id),
+                                headers={
+                                    'Authorization': 'Bearer ' + self.api_key,
+                                    'Content-Type': 'application/json',
+                                }).status_code == 200:
+            return True
+        else:
+            return False
+    def get_balance(self):
+        return str(json.loads(
+            requests.get('https://5sim.net/v1/user/profile',
+                         headers={
+                             'Authorization': 'Bearer ' + self.api_key,
+                             'Content-Type': 'application/json',
+                         }).text)["balance"])
+    def get_frozen_balance(self):
+        return str(json.loads(
+            requests.get('https://5sim.net/v1/user/profile',
+                         headers={
+                             'Authorization': 'Bearer ' + self.api_key,
+                             'Content-Type': 'application/json',
+                         }).text)["frozen_balance"])
+    def get_rating(self):
+        return json.loads(
+            requests.get('https://5sim.net/v1/user/profile',
+                         headers={
+                             'Authorization': 'Bearer ' + self.api_key,
+                             'Content-Type': 'application/json',
+                         }).text)["rating"]
     def get_country_list(self):
         temp = json.loads(
             requests.get('https://5sim.net/v1/guest/countries',
@@ -1091,6 +1121,15 @@ opt93"""
             return {"number":temp["number"], "id":temp["id"]}
         except KeyError:
             return None
+    def ban_number(self,id,service):
+        try:
+            if json.loads(requests.get(
+            "http://smspva.com/priemnik.php?metod=ban&service=" + service + "&id="+ id+"&apikey=" + self.api_key).text)["response"] == 1:
+                return True
+            else:
+                return False
+        except KeyError:
+            return False
     def Get_Code(self,id, country, service):
         try:
             return json.loads(requests.get(
