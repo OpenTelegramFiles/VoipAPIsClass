@@ -7,7 +7,7 @@ class five_sim:
         temp = json.loads(
             requests.get('https://5sim.net/v1/guest/countries',
                          headers={
-                             'Authorization': 'Bearer ' + self.token,
+                             'Authorization': 'Bearer ' + self.api_key,
                              'Content-Type': 'application/json',
                          }).text)
         lista = []
@@ -130,7 +130,7 @@ youla
     def get_number(self, country, product, operator = "any"):
         temp = json.loads(requests.get('https://5sim.net/v1/user/buy/activation/' + country + '/' + operator + '/' + product,
                      headers={
-                         'Authorization': 'Bearer ' + self.token,
+                         'Authorization': 'Bearer ' + self.api_key,
                          'Content-Type': 'application/json',
                      }).text)
         try:
@@ -139,7 +139,7 @@ youla
             return None
     def get_code(self, id):
         temp =json.loads(requests.get('https://5sim.net/v1/user/check/' + str(id), headers={
-    'Authorization': 'Bearer ' + self.token,
+    'Authorization': 'Bearer ' + self.api_key,
     'Content-Type': 'application/json',
         }).text)
         if len(temp["sms"])==0:
