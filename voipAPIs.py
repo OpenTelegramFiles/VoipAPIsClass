@@ -158,14 +158,15 @@ youdo
 youla
 """.split("\n")
     def get_number(self, country, product, operator = "any"):
-        temp = json.loads(requests.get('https://5sim.net/v1/user/buy/activation/' + country + '/' + operator + '/' + product,
-                     headers={
-                         'Authorization': 'Bearer ' + self.api_key,
-                         'Content-Type': 'application/json',
-                     }).text)
         try:
+            temp = json.loads(
+                requests.get('https://5sim.net/v1/user/buy/activation/' + country + '/' + operator + '/' + product,
+                             headers={
+                                 'Authorization': 'Bearer ' + self.api_key,
+                                 'Content-Type': 'application/json',
+                             }).text)
             return {"phone":temp["phone"], "id": temp["id"]}
-        except KeyError:
+        except:
             return None
     def get_code(self, id):
         temp =json.loads(requests.get('https://5sim.net/v1/user/check/' + str(id), headers={
@@ -189,9 +190,10 @@ class onlinesim:
         return str(json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey="+self.api_key).text)["balance"])
     def get_frozen_balance(self):
         return str(json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey=" + self.api_key).text)["zbalance"])
-    def Get_number(self,country_id,service):
+    def Get_order(self,country_id,service):
         try:
-            return json.loads(requests.post("http://onlinesim.ru/api/getNum.php",data={"apikey":self.api_key, "country":country_id,"service":service}).text)["tzid"]
+            number = json.loads(requests.post("http://onlinesim.ru/api/getNum.php",data={"apikey":self.api_key, "country":country_id,"service":service}).text)
+            return {"id":number["tzid"]}
         except KeyError:
             return None
     def get_country_ids(self):
@@ -201,10 +203,16 @@ class onlinesim:
         for country in temp:
             lista.append({"id":str(country), "name": country["name"]})
         return lista
+    def get_number_from_order(self,tzid):
+        try:
+            return json.loads(requests.get(
+                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(tzid)).text)[0]["number"]
+        except KeyError:
+            return None
     def get_code(self,tzid):
         try:
             return json.loads(requests.get(
-                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(id)).text)["msg"]
+                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(tzid)).text)["msg"]
         except KeyError:
             return None
     def get_total_numbers_for_country(self, country_id):
@@ -213,8 +221,8 @@ class smspva:
     def __init__(self, api_key):
         self.api_key = api_key
     def get_balance(self):
-        return json.loads(requests.get(
-            "http://smspva.com/priemnik.php?metod=get_balance&apikey=" + self.api_key).text)["balance"]
+        return str(json.loads(requests.get(
+            "http://smspva.com/priemnik.php?metod=get_balance&apikey=" + self.api_key).text)["balance"])
     def get_service_price(self,country,  service):
         return json.loads(requests.get(
             "http://smspva.com/priemnik.php?metod=get_service_price&country="+ country+ "&service="+service+ "&apikey=" + self.api_key).text)["price"]
