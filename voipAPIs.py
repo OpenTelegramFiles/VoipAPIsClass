@@ -186,9 +186,9 @@ class onlinesim:
     def __init__(self, api_key):
         self.api_key = api_key
     def get_balance(self):
-        return json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey="+self.api_key).text)["balance"]
+        return str(json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey="+self.api_key).text)["balance"])
     def get_frozen_balance(self):
-        return json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey=" + self.api_key).text)["zbalance"]
+        return str(json.loads(requests.get("http://onlinesim.ru/api/getBalance.php?apikey=" + self.api_key).text)["zbalance"])
     def Get_number(self,country_id,service):
         try:
             return json.loads(requests.post("http://onlinesim.ru/api/getNum.php",data={"apikey":self.api_key, "country":country_id,"service":service}).text)["tzid"]
@@ -204,7 +204,7 @@ class onlinesim:
     def get_code(self,tzid):
         try:
             return json.loads(requests.get(
-                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key).text)["msg"]
+                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(id)).text)["msg"]
         except KeyError:
             return None
     def get_total_numbers_for_country(self, country_id):
