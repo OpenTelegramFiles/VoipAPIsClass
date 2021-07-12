@@ -159,16 +159,12 @@ youla
 """.split("\n")
     def get_number(self, country, product, operator = "any"):
         try:
-            temp = json.loads(
-                requests.get('https://5sim.net/v1/user/buy/activation/' + country + '/' + operator + '/' + product,
-                             headers={
-                                 'Authorization': 'Bearer ' + self.api_key,
-                                 'Content-Type': 'application/json',
-                             }).text)
+            temp =requests.get('https://5sim.net/v1/user/buy/activation/' + country + '/' + operator + '/' + product, headers={'Authorization': 'Bearer ' + self.api_key,'Content-Type': 'application/json'})
+            temp = json.loads(temp.text)
             return {"phone":temp["phone"], "id": temp["id"]}
         except:
             return None
-    def get_code(self, id):
+    def Get_Code(self, id):
         temp =json.loads(requests.get('https://5sim.net/v1/user/check/' + str(id), headers={
     'Authorization': 'Bearer ' + self.api_key,
     'Content-Type': 'application/json',
@@ -177,10 +173,8 @@ youla
             return None
         else:
             try:
-                lista = []
                 for message in temp:
-                    lista.append({"code": message["code"], "sender": message["sender"]})
-                return lista
+                    return {"code": message["code"], "sender": message["sender"]}
             except KeyError:
                 return None
 class onlinesim:
