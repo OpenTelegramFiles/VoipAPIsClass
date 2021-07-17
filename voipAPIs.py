@@ -201,12 +201,16 @@ class onlinesim:
         try:
             return json.loads(requests.get(
                 "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(tzid)).text)[0]["number"]
-        except KeyError:
+        except Exception as e7:
+            print(e7)
             return None
     def get_code(self,tzid):
         try:
-            return json.loads(requests.get(
-                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(tzid)).text)["msg"]
+            a = json.loads(requests.get(
+                "http://onlinesim.ru/api/getState.php?apikey=" + self.api_key+"&tzid="+str(tzid)).text)[0]["msg"]
+            print(a)
+            return a
+
         except KeyError:
             return None
     def get_total_numbers_for_country(self, country_id):
